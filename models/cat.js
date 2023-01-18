@@ -18,8 +18,8 @@ const GeoSchema = new Schema({
 
 
 
-//create pirate Schema & model
-const PirateSchema = new Schema({
+//create cat Schema & model
+const CatSchema = new Schema({
     name: {
         type: String,
         required: [true, 'Name field is required']
@@ -35,7 +35,7 @@ const PirateSchema = new Schema({
 
 });
 
-const Pirate = mongoose.model('pirate', PirateSchema);
+const Cat = mongoose.model('cat', CatSchema);
 
-module.exports = Pirate;
+module.exports = Cat;
 

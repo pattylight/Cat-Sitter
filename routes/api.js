@@ -1,46 +1,49 @@
 const express = require('express');
-const Pirate = require('../models/pirate');
+const Cat = require('../models/cat');
 const router = express.Router();
 
 
 
-//list of pirates from database
-router.get('/pirates',function(req, res, next){
-    Pirate.find({}).then(function(pirates){
-        res.send(pirates);
-    });
+//list of cats from database
+router.get('/cats',function(req, res, next){
+   
 
-    Pirate.aggregate().near({
-        near: [parseFloat(req.query.lng), parseFloat(req.query.lat)],
+    Cat.aggregate().near({
+        near:  {
+            'type': 'Point',
+            'coordinates': [parseFloat(req.query.lng), parseFloat(req.query.lat)]
+        },
         maxDistance: 100000,
         spherical: true,
-        distanceField: "dist.calculated"
-       });
+        distanceField: "dis"
+        }).then(function (cats) {
+            res.send(cats);
+        });
 });
 
-//add a new pirate to database
-router.post('/pirates',function(req, res, next){
-    Pirate.create(req.body).then(function(pirate){
-        res.send(pirate);
+//add a new cat to database
+router.post('/cats',function(req, res, next){
+    Cat.create(req.body).then(function(cat){
+        res.send(cat);
      }).catch(next);
 
 });
 
-//update a pirate in database
-router.put('/pirates/:id',function(req, res, next){
-    Pirate.findByIdAndUpdate({_id: req.params.id}, req.body)
+//update a cat in database
+router.put('/cats/:id',function(req, res, next){
+    Cat.findByIdAndUpdate({_id: req.params.id}, req.body)
     .then(function(){
-        Pirate.findOne({_id: req.params.id}).then(function(pirate){
-            res.send(pirate);
+        Cat.findOne({_id: req.params.id}).then(function(cat){
+            res.send(cat);
         });
     });  
 });
 
-//delete a pirate from database
-router.delete('/pirates/:id',function(req, res, next){
-    Pirate.findByIdAndRemove({_id: req.params.id},)
-    .then(function(pirate){
-        res.send(pirate);
+//delete a cat from database
+router.delete('/cats/:id',function(req, res, next){
+    Cat.findByIdAndRemove({_id: req.params.id},)
+    .then(function(cat){
+        res.send(cat);
     });
     
 });
